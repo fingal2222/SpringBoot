@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/demo
+
+jwt:
+  secret: mySecret
+  expiration: 259200
+
+person:
+  lastName: hello
+  age: 18
+  boss: false
+  birth: 2018/1/1
+  maps: {k1: v1,k2: v2}
+  lists:
+   - lisi
+   - zhaoliu
+  arrays: [wangwu, zhangsan]
+  dog:
+      name: 小狗
+      age: 12
