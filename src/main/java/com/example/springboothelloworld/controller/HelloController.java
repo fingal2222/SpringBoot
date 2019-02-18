@@ -34,7 +34,7 @@ public class HelloController {
 
     @Autowired
     private HttpUtil httpUtil;
-
+    private static ArrayList<Integer> tmpArr = new ArrayList<>();
 
     @Value("${person.lastName}")
     private String lasName;
@@ -110,6 +110,7 @@ public class HelloController {
         int Max = 6;
         int numMonth=12;
         int numOffice=4;
+        int [] com = {1,2,3,4};
         DenseMatrix64F stress = new DenseMatrix64F(numMonth, numOffice); //初始化一个矩阵，并进行下面的赋值
         for (int i = 0; i < numMonth; i++) {
             for (int j = 0; j < numOffice; j++) {
@@ -117,6 +118,7 @@ public class HelloController {
                 stress.set(i, j, 0);
             }
         }
+        DenseMatrix64F zero=stress.copy();
         DenseMatrix64F stressTmp =stress.copy();
         List<String> office = Arrays.asList("A", "B", "C", "D");
 
@@ -135,13 +137,15 @@ public class HelloController {
         }
         int tmp = 0;
         int k;
-        for (int i = 0; i < numOffice; i++) {
+        for (int i = numOffice-1; i >=0; i--) {
             int a = map.get(office.get(i));
             for (k = tmp; k < a + tmp; k++) {
                 init.set(k, i, 1);
             }
             tmp += a;
         }
+        System.out.println("data:");
+        System.out.println(init);
         //假设有5个学生
         for (int num = 0; num < total; num++) {
             DenseMatrix64F L2=init.copy();
@@ -156,29 +160,46 @@ public class HelloController {
             all.add(3);
            int excessCol=0;
            int blankCol=0;
-            for (int i = 0; i < numMonth; i++) {
-                for (int j = 0; j < numOffice; j++) {
-                    if ((int) stressTmp.get(i, j) > Max) {
-                        excessCol=j;//超过限制的列
-                        //找一个距离最近的空列进行交换
-                        for (int m=excessCol+1;m<numOffice;m++) {
-                            if ((int) stressTmp.get(i, m)< Max) {
-                                blankCol = m;
-                                j=4;
-                                break;
+//            for (int i = 0; i < numMonth; i++) {
+//                for (int j = 0; j < numOffice; j++) {
+//                    if ((int) stressTmp.get(i, j) > Max) {
+//                        excessCol=j;//超过限制的列
+//                        map.get(office.get(j));//科室时长;
+//                        //找一个距离最近的空列进行交换
+//                        for (int m=excessCol+1;m<numOffice;m++) {
+//                            if ((int) stressTmp.get(i, m)< Max) {
+//                                blankCol = m;
+//                                j=4;
+//                                break;
+//                            }
+//                        }
+//                        List<Integer> exclued=new ArrayList<Integer>();
+//                        exclued.add(blankCol);
+//                        exclued.add(excessCol);
+//                        L2=change(L2,blankCol,excessCol);
+//
+//                        all.removeAll(exclued);
+//                        L2=change(L2,(int)all.get(0),(int)all.get(1));
+//                    }
+//                }
+//                i=12;
+//            }
+
+                        for (int i = 0; i < numMonth; i++) {
+                            for (int j = 0; j < numOffice; j++) {
+                                if ((int) stressTmp.get(i, j) > Max) {
+
+                                    int [] com2 = {1,2,3,4};
+                                    String str=arrangement(numOffice,com);
+//                                    str.split()
+//                                    list.removeAll(all);
+//                                    stressTmp=stress;
+//                                    DenseMatrix64F dd=shuffle(zero,list);
+//                                    CommonOps.add(dd,stressTmp,stressTmp);
+
+                                }
                             }
                         }
-                        List<Integer> exclued=new ArrayList<Integer>();
-                        exclued.add(blankCol);
-                        exclued.add(excessCol);
-                        L2=change(L2,blankCol,excessCol);
-
-                        all.removeAll(exclued);
-                        L2=change(L2,(int)all.get(0),(int)all.get(1));
-                    }
-                }
-                i=12;
-            }
             CommonOps.add(stress, L2, stress);
             stressTmp=stress.copy();
             int stu=num+1;
@@ -191,6 +212,11 @@ public class HelloController {
     @GetMapping("/yieldDemo2/{total}")
     public void testsfor2(@PathVariable("total") int total)
     {
+
+        int [] com = {1,2,3,4};
+        int k = 4;
+        System.out.println("\n排列结果：");
+        arrangement(k,com);
         int Max = 6;
         int numMonth=12;
         int numOffice=4;
@@ -243,5 +269,67 @@ public class HelloController {
             denseMatrix64F.set(k,j,tmp);
         }
         return denseMatrix64F;
+    }
+
+    public String arrangement(int k,int []arr){
+        String str="";
+        if(k == 1){
+            for (int i = 0; i < arr.length; i++) {
+                tmpArr.add(arr[i]);
+                str=str+","+tmpArr.toString();
+                System.out.print(tmpArr.toString() + ",");
+                tmpArr.remove((Object)arr[i]);
+            }
+        }else if(k > 1){
+            for (int i = 0; i < arr.length; i++) { //按顺序挑选一个元素
+                tmpArr.add(arr[i]); //添加选到的元素
+                arrangement(k - 1, removeArrayElements(arr, tmpArr.toArray(new Integer[1]))); //没有取过的元素，继续挑选
+                tmpArr.remove((Object)arr[i]);
+            }
+        }else{
+
+        }
+        return str;
+    }
+
+    public static int[] removeArrayElements(int[] arr, Integer... elements){
+        List<Integer> remainList = new ArrayList<>(arr.length);
+        for(int i=0;i<arr.length;i++){
+            boolean find = false;
+            for(int j=0;j<elements.length;j++){
+                if(arr[i] == elements[j]){
+                    find = true;
+                    break;
+                }
+            }
+            if(!find){ //没有找到的元素保留下来
+                remainList.add(arr[i]);
+            }
+        }
+        int[] remainArray = new int[remainList.size()];
+        for(int i=0;i<remainList.size();i++){
+            remainArray[i] = remainList.get(i);
+        }
+        return remainArray;
+    }
+
+    public  DenseMatrix64F  shuffle(DenseMatrix64F denseMatrix64F,ArrayList<Integer> tmpArr2 )
+    {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("A", 2);
+        map.put("B", 2);
+        map.put("C", 4);
+        map.put("D", 4);
+        int tmp=0;
+        for (int i=0;i<tmpArr2.size();i++)
+        {
+            int len=map.get(tmpArr2.get(i));
+            for (int j=tmp;j<len+tmp;j++)
+            {
+                denseMatrix64F.set(j,i,1);
+            }
+            tmp+=len;
+        }
+        return  denseMatrix64F;
     }
 }
