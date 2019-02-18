@@ -7,9 +7,12 @@ import com.example.springboothelloworld.dto.Person;
 import com.example.springboothelloworld.dto.Producer;
 import com.example.springboothelloworld.utils.HttpUtil;
 import com.example.springboothelloworld.utils.JwtUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.apache.commons.math.linear.Array2DRowRealMatrix;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -105,9 +108,11 @@ public class HelloController {
     public void testsfor(@PathVariable("total") int total) {
 //L是压力表，先都未0；
         int Max = 6;
-        DenseMatrix64F stress = new DenseMatrix64F(12, 4); //初始化一个矩阵，并进行下面的赋值
-        for (int i = 0; i < 12; i++) {
-            for (int j = 0; j < 4; j++) {
+        int numMonth=12;
+        int numOffice=4;
+        DenseMatrix64F stress = new DenseMatrix64F(numMonth, numOffice); //初始化一个矩阵，并进行下面的赋值
+        for (int i = 0; i < numMonth; i++) {
+            for (int j = 0; j < numOffice; j++) {
 
                 stress.set(i, j, 0);
             }
@@ -115,32 +120,32 @@ public class HelloController {
         DenseMatrix64F stressTmp =stress.copy();
         List<String> office = Arrays.asList("A", "B", "C", "D");
 
+        Map<String, Integer> map = new HashMap<>();
+        map.put("A", 2);
+        map.put("B", 2);
+        map.put("C", 4);
+        map.put("D", 4);
+
+        //按需求生成优先级矩阵
+        DenseMatrix64F init = new DenseMatrix64F(numMonth, numOffice); //初始化一个矩阵，并进行下面的赋值
+        for (int i = 0; i < numMonth; i++) {
+            for (int j = 0; j < numOffice; j++) {
+                init.set(i, j, 0);
+            }
+        }
+        int tmp = 0;
+        int k;
+        for (int i = 0; i < numOffice; i++) {
+            int a = map.get(office.get(i));
+            for (k = tmp; k < a + tmp; k++) {
+                init.set(k, i, 1);
+            }
+            tmp += a;
+        }
         //假设有5个学生
         for (int num = 0; num < total; num++) {
-            Map<String, Integer> map = new HashMap<>();
-            map.put("A", 2);
-            map.put("B", 2);
-            map.put("C", 4);
-            map.put("D", 4);
-
-            DenseMatrix64F L2 = new DenseMatrix64F(12, 4); //初始化一个矩阵，并进行下面的赋值
-            for (int i = 0; i < 12; i++) {
-                for (int j = 0; j < 4; j++) {
-                    L2.set(i, j, 0);
-                }
-            }
-            int tmp = 0;
-            int k;
-            for (int i = 0; i < 4; i++) {
-                int a = map.get(office.get(i));
-                for (k = tmp; k < a + tmp; k++) {
-                    L2.set(k, i, 1);
-                }
-                tmp += a;
-            }
-
+            DenseMatrix64F L2=init.copy();
             CommonOps.add(stressTmp, L2, stressTmp);
-
 //            System.out.println("data为:");
 //            System.out.println(stressTmp);
             //如果超过限制换行
@@ -151,13 +156,13 @@ public class HelloController {
             all.add(3);
            int excessCol=0;
            int blankCol=0;
-            for (int i = 0; i < 12; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if ((int) stressTmp.get(i, j) > 6) {
+            for (int i = 0; i < numMonth; i++) {
+                for (int j = 0; j < numOffice; j++) {
+                    if ((int) stressTmp.get(i, j) > Max) {
                         excessCol=j;//超过限制的列
                         //找一个距离最近的空列进行交换
-                        for (int m=excessCol+1;m<4;m++) {
-                            if ((int) stressTmp.get(i, m)< 6) {
+                        for (int m=excessCol+1;m<numOffice;m++) {
+                            if ((int) stressTmp.get(i, m)< Max) {
                                 blankCol = m;
                                 j=4;
                                 break;
@@ -183,7 +188,50 @@ public class HelloController {
         System.out.println("stress:"+stress);
     }
 
+    @GetMapping("/yieldDemo2/{total}")
+    public void testsfor2(@PathVariable("total") int total)
+    {
+        int Max = 6;
+        int numMonth=12;
+        int numOffice=4;
+        DenseMatrix64F stress = new DenseMatrix64F(numMonth, numOffice); //初始化一个矩阵，并进行下面的赋值
+        for (int i = 0; i < numMonth; i++) {
+            for (int j = 0; j < numOffice; j++) {
 
+                stress.set(i, j, 0);
+            }
+        }
+        JsonObject jsonObject=new JsonObject();
+        JsonArray array=new JsonArray();
+        JsonObject jsonObject1=new JsonObject();
+        jsonObject1.addProperty("id","A");
+        jsonObject1.addProperty("colIndex",0);
+        jsonObject1.addProperty("len",2);
+        jsonObject1.addProperty("scale","0,2,4,6,8,10");
+        array.add(jsonObject1);
+        JsonObject jsonObject2=new JsonObject();
+        jsonObject2.addProperty("id","B");
+        jsonObject2.addProperty("colIndex",1);
+        jsonObject2.addProperty("len",2);
+        jsonObject2.addProperty("scale","0,2,4,6,8,10");
+        array.add(jsonObject2);
+        JsonObject jsonObject3=new JsonObject();
+        jsonObject3.addProperty("id","C");
+        jsonObject3.addProperty("colIndex",2);
+        jsonObject3.addProperty("len",4);
+        jsonObject3.addProperty("scale","0,4,8");
+        array.add(jsonObject3);
+        JsonObject jsonObject4=new JsonObject();
+        jsonObject4.addProperty("id","D");
+        jsonObject4.addProperty("colIndex",3);
+        jsonObject4.addProperty("len",4);
+        jsonObject4.addProperty("scale","0,4,8");
+        array.add(jsonObject4);
+        jsonObject.add("properties",array);
+        System.out.println(jsonObject.toString());
+       JsonArray jsonArray= jsonObject.get("properties").getAsJsonArray();
+
+    }
     public DenseMatrix64F change(DenseMatrix64F denseMatrix64F, int i, int j) {
 
         int numRows = denseMatrix64F.getNumRows();
