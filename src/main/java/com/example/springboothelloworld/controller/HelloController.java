@@ -9,19 +9,16 @@ import com.example.springboothelloworld.utils.HttpUtil;
 import com.example.springboothelloworld.utils.JwtUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.commons.math.linear.Array2DRowRealMatrix;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
+
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/hello")
@@ -190,10 +187,9 @@ public class HelloController {
                                 if ((int) stressTmp.get(i, j) > Max) {
 
                                     int [] com2 = {1,2,3,4};
-                                    String str=arrangement(numOffice,com);
-//                                    str.split()
-//                                    list.removeAll(all);
-//                                    stressTmp=stress;
+                                    List list=arrangement(numOffice,com);
+                                    list.removeAll(all);
+                                    stressTmp=stress;
 //                                    DenseMatrix64F dd=shuffle(zero,list);
 //                                    CommonOps.add(dd,stressTmp,stressTmp);
 
@@ -227,6 +223,8 @@ public class HelloController {
                 stress.set(i, j, 0);
             }
         }
+//        ArrayList<Integer> ne=Arrays.asList("[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1],[1, 2, 3, 4],[1, 2, 4, 3],[1, 3, 2, 4],[1, 3, 4, 2],[1, 4, 2, 3],[1, 4, 3, 2],[2, 1, 3, 4],[2, 1, 4, 3],[2, 3, 1, 4],[2, 3, 4, 1],[2, 4, 1, 3],[2, 4, 3, 1],[3, 1, 2, 4],[3, 1, 4, 2],[3, 2, 1, 4],[3, 2, 4, 1],[3, 4, 1, 2],[3, 4, 2, 1],[4, 1, 2, 3],[4, 1, 3, 2],[4, 2, 1, 3],[4, 2, 3, 1],[4, 3, 1, 2],[4, 3, 2, 1]");
+
         JsonObject jsonObject=new JsonObject();
         JsonArray array=new JsonArray();
         JsonObject jsonObject1=new JsonObject();
@@ -271,12 +269,13 @@ public class HelloController {
         return denseMatrix64F;
     }
 
-    public String arrangement(int k,int []arr){
+    public List arrangement(int k,int []arr){
+        List<ArrayList<Integer>> list=new ArrayList<>();
         String str="";
         if(k == 1){
             for (int i = 0; i < arr.length; i++) {
                 tmpArr.add(arr[i]);
-                str=str+","+tmpArr.toString();
+                list.add(tmpArr);
                 System.out.print(tmpArr.toString() + ",");
                 tmpArr.remove((Object)arr[i]);
             }
@@ -287,9 +286,9 @@ public class HelloController {
                 tmpArr.remove((Object)arr[i]);
             }
         }else{
-
+            return list;
         }
-        return str;
+return null;
     }
 
     public static int[] removeArrayElements(int[] arr, Integer... elements){
