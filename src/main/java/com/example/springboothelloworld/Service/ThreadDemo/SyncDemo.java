@@ -3,6 +3,7 @@ package com.example.springboothelloworld.Service.ThreadDemo;
 public class SyncDemo {
     public  static  void  main(String[] args)
     {
+
         Object money=new Object();
         Object goods=new Object();
         Test test=new Test(money,goods);

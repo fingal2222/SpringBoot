@@ -15,7 +15,9 @@ public class StimulateDuck {
         redHeadDuck.swim();
 
         redHeadDuck.setFlyBehavior(new BadFlyBehavior());
+        redHeadDuck.setQuackBehavior(new GeGeQuackBehavior() );
         redHeadDuck.fly();
+        redHeadDuck.quack();
 
     }
 }

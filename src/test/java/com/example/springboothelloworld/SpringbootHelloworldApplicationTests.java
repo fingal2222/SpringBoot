@@ -1,12 +1,11 @@
 package com.example.springboothelloworld;
 
+
 import com.example.springboothelloworld.Service.yieldDemo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringbootHelloworldApplication.class)
 public class SpringbootHelloworldApplicationTests {
@@ -29,6 +28,16 @@ public class SpringbootHelloworldApplicationTests {
         t3.start();
         System.out.println( "主线程");
 
+    }
+
+
+    @Test
+    public  void test()
+    {
+        short s1=1;
+//        s1=s1+1;
+//        s1+=1;
+        System.out.println(s1);
     }
 
 }

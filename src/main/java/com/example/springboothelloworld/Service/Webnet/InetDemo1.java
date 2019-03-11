@@ -1,11 +1,5 @@
 package com.example.springboothelloworld.Service.Webnet;
 
-
-
-
-
-
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
